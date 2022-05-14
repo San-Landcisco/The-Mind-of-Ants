@@ -6,11 +6,18 @@ class Individual:
     def __init__(self, state_vector):
         self.state_vector = state_vector
 
+    def norm(self):
+        return np.linalg.norm(self.state_vector)
+
 class Network:
     def __init__(self, graph, census, maps):
         self.graph = graph #underlying graph object of the network
         self.census = census #dictionary from nodes in graph to individuals
         self.maps = maps
+
+        self.norm_table = {}
+        for node in self.graph.nodes:
+            self.norm_table[node] = [self.census[node].norm()]
 
     def state(self, node):
         return self.census[node].state_vector
@@ -27,6 +34,7 @@ class Network:
                 new_state[node] += self.maps[(source,node)].dot(self.state(source))
         for node in self.graph.nodes:
             self.census[node].state_vector = new_state[node]
+            self.norm_table[node].append(self.census[node].norm())
 
     def plot_graph(self):
         pos = nx.spring_layout(self.graph)
@@ -57,3 +65,11 @@ if __name__ == '__main__':
     for iteration in range(DEPTH):
         test.print()
         test.update()
+    print(test.norm_table)
+
+    plt.plot(test.norm_table[1])
+    plt.plot(test.norm_table[2])
+    plt.plot(test.norm_table[3])
+
+    plt.plot(np.add(np.array(test.norm_table[1]),np.array(test.norm_table[2]),np.array(test.norm_table[3]))/3)
+    plt.show()

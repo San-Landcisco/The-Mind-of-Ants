@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
 import random
 import math
@@ -67,6 +68,15 @@ class Colony:
         plt.axis('off')
         plt.savefig('AntArgument'+str(label))
         plt.close()
+        
+    def plot_network(self, label):
+        G = nx.DiGraph()
+        G.add_edges_from(self.friends)
+
+        pos = nx.spring_layout(G)
+        nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), node_size = 250)
+        nx.draw_networkx_edges(G, pos, edgelist=self.friends)
+        plt.show()
 
 #john = Ant()
 #amy = Ant()

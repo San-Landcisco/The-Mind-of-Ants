@@ -1,10 +1,7 @@
 import matplotlib.pyplot as plt
-import networkx as nx
 import numpy as np
 import random
 import math
-
-PI = 3.14159
 
 def rotation(angle):
     return np.array([[math.cos(angle),-math.sin(angle)],[math.sin(angle),math.cos(angle)]])
@@ -12,7 +9,7 @@ def rotation(angle):
 class Ant:
     def __init__(self, heading = None):
         if heading == None:
-            heading = random.uniform(0,2*PI)
+            heading = random.uniform(0,2*np.pi)
         self.compass = np.array([math.cos(heading),math.sin(heading)])
         self.heading = heading
 
@@ -29,7 +26,7 @@ class Colony:
     def deliberate(self):
         resolution = {}
 
-        self.members[5].heading += .1 % (2*PI)
+        self.members[5].heading += .1 % (2*np.pi)
         self.members[5].rebalance()
 
         for pair in self.friends:
@@ -42,12 +39,13 @@ class Colony:
 
             if np.sign(resolution[pair]) <= 0:
                 #pair[1].compass = rotation(-resolution[pair]/self.lethargy).dot(pair[1].compass)
-                pair[1].heading = (pair[1].heading + (resolution[pair]%PI)/self.lethargy)%(2*PI)
+                pair[1].heading = (pair[1].heading + (resolution[pair]%np.pi)/self.lethargy)%(2*np.pi)
                 pair[1].rebalance()
             else:
                 #pair[1].compass = rotation(resolution[pair]/self.lethargy).dot(pair[1].compass)
-                pair[1].heading = (pair[1].heading - (resolution[pair]%PI)/self.lethargy)%(2*PI)
+                pair[1].heading = (pair[1].heading - (resolution[pair]%np.pi)/self.lethargy)%(2*np.pi)
                 pair[1].rebalance()
+
 
     def census(self):
         census_data = []
@@ -70,9 +68,6 @@ class Colony:
         plt.savefig('AntArgument'+str(label))
         plt.close()
 
-    def plot_network(self, label):
-        G = nx.DiGraph()
-        G.add_edges_from(self.friends)
 #john = Ant()
 #amy = Ant()
 #cecil = Ant()

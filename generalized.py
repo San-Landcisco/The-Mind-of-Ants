@@ -44,17 +44,19 @@ class Network:
         plt.close()
 
 G = nx.DiGraph()
-G.add_edges_from([(1,2),(1,3),(3,1)])
+G.add_edges_from([(1,2),(1,3),(3,1),(2, 2)])
 
 A = Individual(np.array([1,0]))
 B = Individual(np.array([0,1]))
 C = Individual(np.array([1,1]))
+D = Individual(np.array([-1,1]))
 
 AtB = np.array([[1,0],[0,1]])
 AtC = np.array([[1,-1],[-1,1]])
 CtA = np.array([[-1,0],[0,-1]])
+BtB = np.array([[-1,0],[-1,-1]])
 
-test = Network(G, {1:A,2:B,3:C}, {(1,2):AtB,(1,3):AtC,(3,1):CtA})
+test = Network(G, {1:A,2:B,3:C}, {(1,2):AtB,(1,3):AtC,(3,1):CtA, (2, 2):BtB})
 
 if __name__ == '__main__':
 
